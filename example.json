@@ -1,12 +1,13 @@
+  
 {
 	"mongo": {
 		"enabled": false,
-		"url": "mongodb+srv://aa:aa@cluster0.oy7tv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+		"url": ""
 	},
 	"oauth2": {
 		"discord": {
-			"clientID": "873734846273429575",
-			"clientSecret": "y5Sr6s_kXu0BqXQmxBjNkYt5L71c7-7Y"
+			"clientID": "",
+			"clientSecret": ""
 		}
 	},
 	"key": "test",
