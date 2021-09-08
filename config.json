@@ -1,0 +1,24 @@
+{
+	"mongo": {
+		"enabled": false,
+		"url": "mongodb+srv://aa:aa@cluster0.oy7tv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+	},
+	"oauth2": {
+		"discord": {
+			"clientID": "873734846273429575",
+			"clientSecret": "y5Sr6s_kXu0BqXQmxBjNkYt5L71c7-7Y"
+		}
+	},
+	"key": "test",
+	"fileSizeLimit": "2 * 1024 * 1024 * 1024",
+	"fileNameLength": 8,
+	"ssl": {
+		"useSSL": false,
+		"privateKeyPath": "./etc/privateKey.dem",
+		"certificatePath": "./etc/certKey.dem"
+	},
+	"fileExtensionCheck": {
+		"enabled": true,
+		"extensionsAllowed": [".png", ".jpg", ".jpeg", ".gif"]
+	}
+}

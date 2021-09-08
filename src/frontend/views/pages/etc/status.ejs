@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>x · status</title>
+
+        <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+        <meta name="robots" content="noindex">
+        <meta name="description" content="Current status and uptime." />
+        <meta property="og:description" content="Current status and uptime." />
+        <meta property="og:type" content="Website" />
+        <meta property="og:site_name" content="x.lol" />
+        <meta property="og:title" content="x · status" />
+        <meta property="og:description" content="Current status and uptime." />
+        <meta property="twitter:card" content="A private image hosting service" />
+        <meta property="twitter:site" content="x.lol" />
+        <meta property="twitter:creator" content="@AceLikesGh0sts" />
+        <meta property="twitter:description" content="Current status and uptime." />
+        <meta content="#FFC0CB" data-react-helmet="true" name="theme-color" />
+
+
+        <link async href="/static/css/loading.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+        <script defer src="/static/js/particles.js"></script>
+        <link async href="https://fonts.googleapis.com/css2?family=Reem+Kufi&amp;display=swap" rel="stylesheet" />
+        <link async href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet" />
+
+        <style preload>
+            .pageContainer {
+                color: white;
+                background: #101010;
+                display: flex;
+                height: 100%;
+                align-items: center;
+                justify-content: center;
+                font-family: "Ubuntu Mono", monospace;
+            }
+
+            .card {
+                width: 200px;
+                min-width: 700px;
+                background: #212121;
+                border-radius: 20px;
+                box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
+                animation: float 6s ease-in-out infinite;
+                overflow: hidden;
+            }
+
+            #rest {
+                padding: 30px 15px;
+                line-height: 30px;
+                color: #282b30;
+                text-align: center;
+            }
+
+            .button {
+                display: block;
+                height: 23px;
+                line-height: 80px;
+                width: 23px;
+                font-size: 2em;
+                font-weight: bold;
+                border-radius: 50%;
+                color: white;
+                text-align: center;
+                cursor: pointer;
+            }
+
+            .green {
+                background-color: #4CAF50;
+            }
+
+            .greent {
+                color: #4CAF50;
+            }
+
+            .yellow {
+                background-color: #FFBD44;
+            }
+
+            .red {
+                background-color: #FF605C;
+            }
+
+            .redt {
+                color: #FF605C
+            }
+
+            .center {
+                position: absolute;
+                text-align: center;
+                top: 50%;
+                left: 50%;
+                margin-right: -50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .trw {
+                display: block;
+            }
+            .tr {
+                top:100%;
+                float: right;
+                display: inline-flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                float: right;
+                overflow: hidden;
+                margin-top: 1%;
+                margin-right: 2%;
+            }
+
+            .tr>div {
+                margin: 3px
+            }
+        </style>
+    </head>
+
+    <body>
+        <%- include('../../partials/loading.ejs') %>
+        <div class="pageContainer" style="z-index: 1;">
+            <div class="page" id="page" style="display:none;z-index: 1;">
+                <!-- align="center" is no longer supported by modern browsers, so apply class of center. -->
+                <div align="center" class="center" id="center">
+                    <div class="card" id="card">
+
+                        <div class="rest">
+                            <div class="trw">
+                                <div class="tr">
+                                    <div class="button green" id="fullscreen"></div>
+                                    <div class="button yellow" id="minimize"></div>
+                                    <a href="/">
+                                        <div class="button red" id="close"></div>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <h2 class="header">
+                                Status
+                            </h2>
+    
+                            <hr>
+
+                            <h3>
+                                <% if (API) { %>
+                                API: <span class="greent">&#10003;</span> <br>
+                                <% } else { %>
+                                API: <span class="redt">X</span> <br>
+                                <% } %>
+                                <% if (CDN) {%>
+                                CDN: <span class="greent">&#10003;</span> <br>
+                                <% } else { %>
+                                CDN: <span class="redt">X</span> <br>
+                                <% } %>
+                                <% if (Images) { %>
+                                Images: <span class="greent">&#10003;</span> <br>
+                                <% } else { %>
+                                Images: <span class="redt">X</span> <br>
+                                <% } %>
+                                <% if (Pages) { %>
+                                Pages: <span class="greent">&#10003;</span> <br>
+                                <% } else { %>
+                                Images: <span class="redt">X</span> <br>
+                                <% } %>
+                            </h3>
+
+                            <hr>
+                            <h4>
+                                <a href="/" style="color:gray;text-decoration:none;font-family:cutive mono,monospace">
+                                    © acez softwares - 2017-2021
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script id="var">let f = false;</script>
+        <script id="buttonManager">
+            $("#fullscreen").click(function () { f ? ($("#center").removeAttr("style"), $("#card").removeAttr("style"), f = !1) : (document.getElementById("center").style.display = "block", document.getElementById("center").style.width = "100%", document.getElementById("center").style.height = "100%", document.getElementById("center").style.display = "block", document.getElementById("card").style.width = "100%", document.getElementById("card").style.height = "100%", f = !0) }), $("#minimize").click(function () { $("#center").removeAttr("style"), $("#card").removeAttr("style") });
+        </script>
+    </body>
+
+</html>

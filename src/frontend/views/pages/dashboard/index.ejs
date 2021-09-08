@@ -1,0 +1,46 @@
+<!-- this is the default page. -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>x · (u)dashboard</title>
+
+        <meta charset="utf-8">
+        <meta property="og:type" content="Website">
+        <meta property="og:site_name" content="x">
+        <meta property="og:title" content="x · (u)dashboard">
+        <meta property="og:description" content="x · A private service.">
+        <meta name="twitter:card" content="x · A private service.">
+        <meta name="twitter:site" content="x.lol">
+        <meta name="twitter:creator" content="@AceLikesGh0sts">
+        <meta content="#FFC0CB" data-react-helmet="true" name="theme-color" />
+
+        <link href="/static/css/home/home.css" rel="stylesheet">
+
+        <link href="/static/css/loading.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.4.1.min.js"
+            integrity="sha256-LOx49zn73f7YUs15NNJTDnzEyPFLOGc7A7pfuICtTMc=" crossorigin="anonymous"></script>
+
+        <script class="pjs" defer src="/static/js/particles.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:500&amp;display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&amp;display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <%- include('../../partials/loading.ejs') %>
+
+        <div class="page" id="page" style="display:none;">
+            <div class="sw" style="display:none;">
+                <div class="sidenav">
+                    <a href="javascript:void(0)">temp</a>
+                    <a href="javascript:void(0)">temp</a>
+                    <a href="javascript:void(0)">temp</a>
+                    <a href="javascript:void(0)">temp</a>
+                </div>
+            </div>
+        </div>
+
+        <script>setTimeout(()=>{$(".pg-canvas").remove(),$(".pjs").remove(),$(".sw").show()},2e3);</script>
+    </body>
+</html>

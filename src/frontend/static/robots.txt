@@ -1,0 +1,22 @@
+#
+# robots.txt
+#
+# TODO: REDO.
+
+User-Agent: *
+# Allowed
+Allow: /
+Allow: /status
+Allow: /tos
+Allow: /faq
+Allow: /static/*.*
+Allow: /static/**/*.*
+Allow: /login
+Allow: /register
+# Blocked
+Disallow: /logout
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /i
+Disallow: /i/**.*
+Disallow: /i/*.* 
