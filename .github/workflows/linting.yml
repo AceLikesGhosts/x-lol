@@ -1,16 +1,7 @@
 name: Lint
 
 on:
-  pull_request:
-  push:
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-    branches:
-      - master
->>>>>>> 6a1d0a75059722e08a12a0c662833b6d25392917
->>>>>>> stable
+  [pull_request, push]
 
 jobs:
   eslint:
