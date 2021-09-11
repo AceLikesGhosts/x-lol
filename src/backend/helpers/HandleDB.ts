@@ -13,7 +13,9 @@ export async function loadMongoose(): Promise<boolean>
         await mongoose.connect(cfg.mongo.url, { useNewUrlParser: true });
 
         return new Promise<boolean>((resolve) => resolve(true));
-    } catch (err) {
+    }
+    catch (err) 
+    {
         return new Promise<boolean>((resolve) => resolve(err));
     }
 }

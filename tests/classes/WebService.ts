@@ -1,12 +1,12 @@
 import { Application, json, urlencoded } from 'express';
 import cors from 'cors';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import getKey from '../../src/backend/helpers/GetKey';
-import morgan from "morgan";
+import morgan from 'morgan';
 import User from '../../src/backend/models/User';
 import session from 'express-session';
 import passport, { PassportStatic } from 'passport';
-import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as LocalStrategy } from 'passport-local';
 import { join } from 'path';
 import ViewRouter from '../../src/backend/routes/views/ViewRoute';
 import subdomain from '../../src/backend/helpers/handleSubdomains';
@@ -49,7 +49,7 @@ class WebService
 
     constructor(opts: WebServiceOptions)
     {
-        if (!opts) throw new Error("No options provided.");
+        if (!opts) throw new Error('No options provided.');
 
         this._app = opts.app;
         this._config = opts.config;
@@ -58,7 +58,7 @@ class WebService
         this._secret = opts.secret;
         this._passport = passport;
 
-        if (typeof opts.dev === "boolean")
+        if (typeof opts.dev === 'boolean')
             this._dev = opts.dev || false;
     }
 
@@ -76,14 +76,14 @@ class WebService
     {
         return new Promise<number>(async (resolve) =>
         {
-            if (typeof this._secret === "number")
+            if (typeof this._secret === 'number')
                 this._secret = await getKey(this._secret);
 
             await this.setSettings();
             await this.registerRoutes();
 
             if (this._dev)
-                morgan("dev");
+                morgan('dev');
 
             if (this._config.ssl.useSSL)
             {
@@ -95,7 +95,8 @@ class WebService
                 const httpsServer = https.createServer(credentials, this._app);
 
                 httpsServer.listen(this._port);
-            } else
+            }
+ else
             {
                 this._server = this._app.listen(this._port);
             }
@@ -105,7 +106,8 @@ class WebService
 
     public close(): Promise<boolean>
     {
-        return new Promise<boolean>((resolve) => {
+        return new Promise<boolean>((resolve) => 
+{
             this._server.close();
             resolve(true);
         });
@@ -118,12 +120,12 @@ class WebService
             this._app.set('view engine', 'ejs');
             this._app.set('views', join(__dirname, '../../frontend/views'));
 
-            let staticDirPath: string = join(__dirname, "..", "..", "frontend", "static");
-            let uploadDirPath: string = join(__dirname, "..", "..", "frontend", "uploads");
-            this._app.use("/static", this._express.static(staticDirPath));
+            const staticDirPath: string = join(__dirname, '..', '..', 'frontend', 'static');
+            const uploadDirPath: string = join(__dirname, '..', '..', 'frontend', 'uploads');
+            this._app.use('/static', this._express.static(staticDirPath));
             this._app.use('/i', this._express.static(uploadDirPath));
 
-            this._app.get('/robots.txt', (_req, res) => res.sendFile(staticDirPath + "/robots.txt"));
+            this._app.get('/robots.txt', (_req, res) => res.sendFile(staticDirPath + '/robots.txt'));
 
             this._app.use(cors());
             this._app.use(urlencoded({ extended: true }));
@@ -151,7 +153,7 @@ class WebService
             )
 
             // Setting it to nothing, essentially clearing it.
-            this._secret = "";
+            this._secret = '';
 
             this._app.use(this._passport.initialize());
             this._app.use(this._passport.session());
@@ -171,16 +173,16 @@ class WebService
     {
         return new Promise<boolean>((resolve) =>
         {
-            this._app.use("/", ViewRouter);
-            this._app.use(subdomain("images", ImageRouter));
+            this._app.use('/', ViewRouter);
+            this._app.use(subdomain('images', ImageRouter));
 
             this._app.use((req, res, _next) =>
             {
                 res.status(404);
 
-                if (req.accepts("html")) return res.redirect("/error?s=404&m=No_content_found");
+                if (req.accepts('html')) return res.redirect('/error?s=404&m=No_content_found');
 
-                if (req.accepts("json")) return res.json({ error: "Content not found." });
+                if (req.accepts('json')) return res.json({ error: 'Content not found.' });
             });
 
             resolve(true);
@@ -194,7 +196,7 @@ class WebService
 
     get uploadDirPath(): Promise<string>
     {
-        return new Promise<string>((resolve) => resolve(join(__dirname, "..", "..", "frontend", "uploads")));
+        return new Promise<string>((resolve) => resolve(join(__dirname, '..', '..', 'frontend', 'uploads')));
     }
 }
 

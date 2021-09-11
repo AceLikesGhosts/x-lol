@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Application, json, urlencoded } from 'express';
 import cors from 'cors';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import getKey from './GetKey';
-import morgan from "morgan";
+import morgan from 'morgan';
 import User from '../models/User';
 import session from 'express-session';
 import passport, { PassportStatic } from 'passport';
-import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as LocalStrategy } from 'passport-local';
 import APIRouter from '../routes/v1/APIV1Route';
 import { join } from 'path';
 import ViewRouter from '../routes/views/ViewRoute';
@@ -50,7 +52,7 @@ class WebService
 
     constructor(opts: WebServiceOptions)
     {
-        if (!opts) throw new Error("No options provided.");
+        if (!opts) throw new Error('No options provided.');
 
         this._app = opts.app;
         this._config = opts.config;
@@ -59,7 +61,7 @@ class WebService
         this._secret = opts.secret;
         this._passport = passport;
 
-        if (typeof opts.dev === "boolean")
+        if (typeof opts.dev === 'boolean')
             this._dev = opts.dev || false;
     }
 
@@ -75,9 +77,10 @@ class WebService
      */
     public init(): Promise<number>
     {
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise<number>(async (resolve) =>
         {
-            if (typeof this._secret === "number")
+            if (typeof this._secret === 'number')
                 this._secret = await getKey(this._secret);
 
             await loadMongoose();
@@ -85,7 +88,7 @@ class WebService
             await this.registerRoutes();
 
             if (this._dev)
-                morgan("dev");
+                morgan('dev');
 
             if (this._config.ssl.useSSL)
             {
@@ -97,7 +100,9 @@ class WebService
                 const httpsServer = https.createServer(credentials, this._app);
 
                 httpsServer.listen(this._port);
-            } else {
+            }
+ else 
+{
                 this._app.listen(this._port);
             }
             resolve(this._port);
@@ -111,12 +116,12 @@ class WebService
             this._app.set('view engine', 'ejs');
             this._app.set('views', join(__dirname, '../../frontend/views'));
 
-            let staticDirPath: string = join(__dirname, "..", "..", "frontend", "static");
-            let uploadDirPath: string = join(__dirname, "..", "..", "frontend", "uploads");
-            this._app.use("/static", this._express.static(staticDirPath));
+            const staticDirPath: string = join(__dirname, '..', '..', 'frontend', 'static');
+            const uploadDirPath: string = join(__dirname, '..', '..', 'frontend', 'uploads');
+            this._app.use('/static', this._express.static(staticDirPath));
             this._app.use('/i', this._express.static(uploadDirPath));
 
-            this._app.get('/robots.txt', (_req, res) => res.sendFile(staticDirPath + "/robots.txt"));
+            this._app.get('/robots.txt', (_req, res) => res.sendFile(staticDirPath + '/robots.txt'));
 
             this._app.use(cors());
             this._app.use(urlencoded({ extended: true }));
@@ -124,7 +129,7 @@ class WebService
             this._app.use(cookieParser());
 
             this._app.use(session({
-                secret: "" + this._secret as string, // THIS IS GOING TO BE A STRING, PERIOD. EVEN IF A NUMBER IS PASSED.
+                secret: '' + this._secret as string, // THIS IS GOING TO BE A STRING, PERIOD. EVEN IF A NUMBER IS PASSED.
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
@@ -143,7 +148,7 @@ class WebService
             )
 
             // Setting it to nothing, essentially clearing it.
-            this._secret = "";
+            this._secret = '';
 
             this._app.use(this._passport.initialize());
             this._app.use(this._passport.session());
@@ -163,17 +168,18 @@ class WebService
     {
         return new Promise<boolean>((resolve) =>
         {
-            this._app.use("/", ViewRouter);
-            this._app.use(subdomain("api", APIRouter));
-            this._app.use(subdomain("images", ImageRouter));
+            this._app.use('/', ViewRouter);
+            this._app.use(subdomain('api', APIRouter));
+            this._app.use(subdomain('images', ImageRouter));
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             this._app.use((req, res, _next) =>
             {
                 res.status(404);
 
-                if (req.accepts("html")) return res.redirect("/error?s=404&m=No_content_found");
+                if (req.accepts('html')) return res.redirect('/error?s=404&m=No_content_found');
 
-                if (req.accepts("json")) return res.json({ error: "Content not found." });
+                if (req.accepts('json')) return res.json({ error: 'Content not found.' });
             });
 
             resolve(true);
@@ -187,7 +193,7 @@ class WebService
 
     get uploadDirPath(): Promise<string>
     {
-        return new Promise<string>((resolve) => resolve(join(__dirname, "..", "..", "frontend", "uploads")));
+        return new Promise<string>((resolve) => resolve(join(__dirname, '..', '..', 'frontend', 'uploads')));
     }
 }
 

@@ -1,4 +1,4 @@
-import Express, { Application } from "express";
+import Express, { Application } from 'express';
 import WebService from './helpers/WebService';
 import config from '../../config.json';
 
@@ -8,8 +8,8 @@ const ws: WebService = new WebService({ app: app, config: config, express: Expre
 ws.init()
 .then(port => console.log(`Started API on port ${port}`));
 
-let ps = ws.passportSession;
-let up = ws.uploadDirPath;
+const ps = ws.passportSession;
+const up = ws.uploadDirPath;
 
 export default app;
 export {

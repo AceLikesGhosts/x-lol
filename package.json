@@ -9,7 +9,9 @@
     "cn": "npx tsc && node ./dist/src/backend/index.js",
     "compile": "npx tsc",
     "node": "node ./dist/src/backend/index.js",
-    "ts-node": "ts-node ./src/backend/index.ts"
+    "ts-node": "ts-node ./src/backend/index.ts",
+    "lint": "npx eslint . --ext .ts",
+    "lint-fix": "npx eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "Ace",
@@ -48,6 +50,9 @@
     "@types/passport-local-mongoose": "^4.0.15",
     "@types/q": "^1.5.5",
     "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
     "jest": "^27.1.0",
     "jest-extended": "^0.11.5",
     "ts-jest": "^27.0.5",

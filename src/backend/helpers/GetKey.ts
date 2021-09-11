@@ -1,13 +1,13 @@
-import { readFile } from "fs";
+import { readFile } from 'fs';
 
 export function getKey(length: number): Promise<string>
 {
     return new Promise<string>((resolve, reject) =>
     {
-        readFile("./key.txt", (err, data) =>
+        readFile('./key.txt', (err, data) =>
         {
             if (err) return generateKeyDym(length)
-                .then((str: String | null) => str?.toString())
+                .then((str: string | null) => str?.toString())
                 .catch(err => reject(new Error(err)));
 
             return resolve(data.toString());
@@ -22,11 +22,12 @@ function generateKeyDym(length: number): Promise<string | null>
     {
         try
         {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
-            import("tools").then(async exported =>
+            import('tools').then(async exported =>
             {
-                console.warn("No key was provided, generating a key for you with the length of " + length + ".");
-                console.warn("This is going to throw an unhandled rejection error of 'false', please just restart the application.");
+                console.warn('No key was provided, generating a key for you with the length of ' + length + '.');
+                console.warn('This is going to throw an unhandled rejection error of \'false\', please just restart the application.');
 
                 try
                 {
@@ -35,18 +36,20 @@ function generateKeyDym(length: number): Promise<string | null>
                     const key = await new exported.KeyHelper({ saveKeys: true, saveKeysPath: './key.txt' })
                         .generateKey(length);
                     return resolve(key);
-                } catch (err)
+                }
+ catch (err)
                 {
                     return reject(new Error(err));
                 }
             })
                 .catch(err => new Error(err));
-        } catch (err)
+        }
+ catch (err)
         {
-            return reject(new Error("Failed to import Tools LIB, and cannot find ./key.txt"));
+            return reject(new Error('Failed to import Tools LIB, and cannot find ./key.txt'));
         }
 
-        return reject("Failed to create a key.");
+        return reject('Failed to create a key.');
     });
 }
 
