@@ -27,8 +27,9 @@
             integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 
         <script defer src="/static/js/particles.js"></script>
-        <link async href="https://fonts.googleapis.com/css2?family=Reem+Kufi&amp;display=swap" rel="stylesheet" />
-        <link async href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet" />
+        <link async href="https://fonts.googleapis.com/css2?family=Reem+Kufi&amp;display=swap" rel="preload"
+            as="font" />
+        <link async href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="preload" as="font" />
 
         <style preload>
             .pageContainer {
@@ -95,11 +96,11 @@
                 flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
-                float:right;
+                float: right;
                 overflow: hidden;
             }
 
-            .tr > div {
+            .tr>div {
                 margin: 3px
             }
         </style>
@@ -115,7 +116,9 @@
                         <div class="tr">
                             <div class="button green" id="fullscreen"></div>
                             <div class="button yellow" id="minimize"></div>
-                            <a href="/"><div class="button red" id="close"></div></a>
+                            <a href="/">
+                                <div class="button red" id="close"></div>
+                            </a>
                         </div>
 
                         <div class="rest">
@@ -123,7 +126,8 @@
                                 <%= imgName %> (<%= size %>)
                             </h2>
                             <hr>
-                            <img class="img-fluid" src="<%= img %>" alt="Image failed to load.." width="auto" height="auto" />
+                            <img class="img-fluid" src="<%= img %>" alt="Image failed to load.." width="auto"
+                                height="auto" />
                             <hr>
                             <h4>
                                 <a href="/" style="color:gray;text-decoration:none;font-family:cutive mono,monospace">
@@ -140,4 +144,5 @@
             $("#fullscreen").click(function () { f ? ($("#center").removeAttr("style"), $("#card").removeAttr("style"), f = !1) : (document.getElementById("center").style.display = "block", document.getElementById("center").style.width = "100%", document.getElementById("center").style.height = "100%", document.getElementById("center").style.display = "block", document.getElementById("card").style.width = "100%", document.getElementById("card").style.height = "100%", f = !0) }), $("#minimize").click(function () { $("#center").removeAttr("style"), $("#card").removeAttr("style") });
         </script>
     </body>
+
 </html>
