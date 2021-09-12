@@ -11,7 +11,7 @@ const ImageRouter: Router = Router();
 ImageRouter.post('/upload', (req, res) => 
 {
     try 
-{
+    {
         if (!req.headers.auth || req.headers.auth !== 'key')
             return res.status(403).send({ status: 403, message: 'Invalid credentials' });
 
@@ -42,8 +42,8 @@ ImageRouter.post('/upload', (req, res) =>
             });
         });
     }
- catch (err) 
-{
+    catch (err) 
+    {
         console.log(err);
         return res.status(500).send(err);
     }
@@ -51,8 +51,8 @@ ImageRouter.post('/upload', (req, res) =>
 
 ImageRouter.get('/:file', (req, res) => 
 {
-    stat(`${uploadPath}/${req.params.file.toString()}`, (err, stats) => 
-{
+    stat(`${ uploadPath }/${ req.params.file.toString() }`, (err, stats) => 
+    {
         if (err)
             return res.status(404).redirect('/error?s=404&m=Content_not_found');
 
@@ -79,6 +79,7 @@ function formatBytes(bytes: number, decimals = 2)
 }
 
 export default ImageRouter;
-export {
+export
+{
     ImageRouter
 };
