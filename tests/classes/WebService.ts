@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Application, json, urlencoded } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -40,8 +42,8 @@ class WebService
     public _port: number;
     private _config: any;
     private _server: any;
-    private _app: Application;
     private _express: any;
+    private _app: Application;
     private _dev: boolean;
     private _passport: PassportStatic;
     //WE SHOULD CLEAR THIS AFTER APPLYING. ASAP.
@@ -72,36 +74,34 @@ class WebService
      * ```
      * @returns The provided port (this._port)
      */
-    public init(): Promise<number>
+    public async init(): Promise<number>
     {
-        return new Promise<number>(async (resolve) =>
+        if (typeof this._secret === 'number')
+            this._secret = await getKey(this._secret);
+
+        await this.setSettings();
+        await this.registerRoutes();
+
+        if (this._dev)
+            morgan('dev');
+
+        if (this._config.ssl.useSSL)
         {
-            if (typeof this._secret === 'number')
-                this._secret = await getKey(this._secret);
+            const credentials = {
+                key: this._config.ssl.privateKeyPath,
+                cert: this._config.ssl.certificatePath,
+            };
 
-            await this.setSettings();
-            await this.registerRoutes();
+            const httpsServer = https.createServer(credentials, this._app);
 
-            if (this._dev)
-                morgan('dev');
+            httpsServer.listen(this._port);
+        }
+        else
+        {
+            this._server = this._app.listen(this._port);
+        }
 
-            if (this._config.ssl.useSSL)
-            {
-                const credentials = {
-                    key: this._config.ssl.privateKeyPath,
-                    cert: this._config.ssl.certificatePath,
-                };
-
-                const httpsServer = https.createServer(credentials, this._app);
-
-                httpsServer.listen(this._port);
-            }
- else
-            {
-                this._server = this._app.listen(this._port);
-            }
-            resolve(this._port);
-        });
+        return new Promise<number>((resolve) => resolve(this._port));
     }
 
     public close(): Promise<boolean>
@@ -174,8 +174,9 @@ class WebService
         return new Promise<boolean>((resolve) =>
         {
             this._app.use('/', ViewRouter);
-            this._app.use(subdomain('images', ImageRouter));
+            this._app.use(subdomain('imagelears', ImageRouter));
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             this._app.use((req, res, _next) =>
             {
                 res.status(404);
