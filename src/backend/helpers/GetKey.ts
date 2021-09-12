@@ -1,5 +1,16 @@
 import { readFile } from 'fs';
 
+/**
+ * @public
+ * @description Generates a key using the generateKeyDm() function, this is the "public" allowed call function.
+ * @param {number} length How long should the generated key be? 
+ * @returns {Promise<string>} Promise string
+ * @example ```ts
+ * import getKey from 'getKey';
+ * getKey()
+ * .then(key => console.log(key.toString()));
+ * ```
+ */
 export function getKey(length: number): Promise<string>
 {
     return new Promise<string>((resolve, reject) =>
@@ -16,6 +27,12 @@ export function getKey(length: number): Promise<string>
 }
 
 
+/**
+ * @public
+ * @description Uses the AceLikesGhosts/Tools to generate a new private/secret key.
+ * @param {number} length 
+ * @returns {Promise<string | null>} Promise <string | null>
+ */
 function generateKeyDym(length: number): Promise<string | null>
 {
     return new Promise<string | null>((resolve, reject) =>
@@ -37,14 +54,14 @@ function generateKeyDym(length: number): Promise<string | null>
                         .generateKey(length);
                     return resolve(key);
                 }
- catch (err)
+                catch (err)
                 {
                     return reject(new Error(err));
                 }
             })
                 .catch(err => new Error(err));
         }
- catch (err)
+        catch (err)
         {
             return reject(new Error('Failed to import Tools LIB, and cannot find ./key.txt'));
         }

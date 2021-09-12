@@ -10,9 +10,9 @@ import session from 'express-session';
 import passport, { PassportStatic } from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { join } from 'path';
-import ViewRouter from '../../src/backend/routes/views/ViewRoute';
-import subdomain from '../../src/backend/helpers/handleSubdomains';
-import { ImageRouter } from '../../src/backend/routes';
+import { loadMongoose } from '../../src/backend/helpers/HandleDB';
+import subdomain from '../../src/backend/middleware/handleSubdomains';
+import { ImageRouter, APIRouter, ViewRouter } from '../../src/backend/routes';
 import fileUpload from 'express-fileupload';
 import https from 'https';
 
@@ -40,10 +40,10 @@ interface WebServiceOptions
 class WebService
 {
     public _port: number;
-    private _config: any;
+    public _config: any;
     private _server: any;
-    private _express: any;
     private _app: Application;
+    private _express: any;
     private _dev: boolean;
     private _passport: PassportStatic;
     //WE SHOULD CLEAR THIS AFTER APPLYING. ASAP.
@@ -74,43 +74,44 @@ class WebService
      * ```
      * @returns The provided port (this._port)
      */
-    public async init(): Promise<number>
+    public init(): Promise<number>
     {
-        if (typeof this._secret === 'number')
-            this._secret = await getKey(this._secret);
-
-        await this.setSettings();
-        await this.registerRoutes();
-
-        if (this._dev)
-            morgan('dev');
-
-        if (this._config.ssl.useSSL)
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise<number>(async (resolve) =>
         {
-            const credentials = {
-                key: this._config.ssl.privateKeyPath,
-                cert: this._config.ssl.certificatePath,
-            };
+            if (typeof this._secret === 'number')
+                this._secret = await getKey(this._secret);
 
-            const httpsServer = https.createServer(credentials, this._app);
+            await loadMongoose();
+            await this.setSettings();
+            await this.registerRoutes();
 
-            httpsServer.listen(this._port);
-        }
-        else
-        {
-            this._server = this._app.listen(this._port);
-        }
+            if (this._dev)
+                morgan('dev');
 
-        return new Promise<number>((resolve) => resolve(this._port));
+            if (this._config.ssl.useSSL)
+            {
+                const credentials = {
+                    key: this._config.ssl.privateKeyPath,
+                    cert: this._config.ssl.certificatePath,
+                };
+
+                const httpsServer = https.createServer(credentials, this._app);
+
+                this._server = httpsServer.listen(this._port);
+            }
+            else 
+            {
+                this._server = this._app.listen(this._port);
+            }
+            resolve(this._port);
+        });
     }
 
     public close(): Promise<boolean>
     {
-        return new Promise<boolean>((resolve) => 
-{
-            this._server.close();
-            resolve(true);
-        });
+        this._server.close();
+        return new Promise<boolean>((resolve) => resolve(true));
     }
 
     private setSettings(): Promise<number>
@@ -133,8 +134,7 @@ class WebService
             this._app.use(cookieParser());
 
             this._app.use(session({
-                //@ts-ignore
-                secret: this._secret, // THIS IS GOING TO BE A STRING, PERIOD. EVEN IF A NUMBER IS PASSED.
+                secret: '' + this._secret as string, // THIS IS GOING TO BE A STRING, PERIOD. EVEN IF A NUMBER IS PASSED.
                 resave: false,
                 saveUninitialized: false,
                 cookie: {
@@ -174,7 +174,8 @@ class WebService
         return new Promise<boolean>((resolve) =>
         {
             this._app.use('/', ViewRouter);
-            this._app.use(subdomain('imagelears', ImageRouter));
+            this._app.use(subdomain('api', APIRouter));
+            this._app.use(subdomain('images', ImageRouter));
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             this._app.use((req, res, _next) =>
