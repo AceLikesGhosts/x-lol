@@ -43,3 +43,6 @@ ViewRouter.get('/error', (_req, res) =>
 });
 
 export default ViewRouter;
+export {
+    ViewRouter
+};

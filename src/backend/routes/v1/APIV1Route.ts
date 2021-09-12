@@ -72,3 +72,6 @@ APIRouter.post('/login', async (req, res) =>
 });
 
 export default APIRouter;
+export {
+    APIRouter
+};

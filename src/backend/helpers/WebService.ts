@@ -9,14 +9,12 @@ import User from '../models/User';
 import session from 'express-session';
 import passport, { PassportStatic } from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import APIRouter from '../routes/v1/APIV1Route';
 import { join } from 'path';
-import ViewRouter from '../routes/views/ViewRoute';
 import { loadMongoose } from './HandleDB';
-import subdomain from '../helpers/handleSubdomains';
-import { ImageRouter } from '../routes';
+import subdomain from '../middleware/handleSubdomains';
 import fileUpload from 'express-fileupload';
 import https from 'https';
+import { ImageRouter, APIRouter, ViewRouter } from '../routes';
 
 /**
  * @argument { boolean } dev
@@ -42,7 +40,8 @@ interface WebServiceOptions
 class WebService
 {
     public _port: number;
-    public _config;
+    public _config: any;
+    private _server: any;
     private _app: Application;
     private _express: any;
     private _dev: boolean;
@@ -99,14 +98,20 @@ class WebService
 
                 const httpsServer = https.createServer(credentials, this._app);
 
-                httpsServer.listen(this._port);
+                this._server = httpsServer.listen(this._port);
             }
- else 
-{
-                this._app.listen(this._port);
+            else 
+            {
+                this._server = this._app.listen(this._port);
             }
             resolve(this._port);
         });
+    }
+
+    public close(): Promise<boolean>
+    {
+        this._server.close();
+        return new Promise<boolean>((resolve) => resolve(true));
     }
 
     private setSettings(): Promise<number>

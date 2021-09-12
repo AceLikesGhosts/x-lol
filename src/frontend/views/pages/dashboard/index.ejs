@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>x · (u)dashboard</title>
 
@@ -23,8 +24,8 @@
 
         <script class="pjs" defer src="/static/js/particles.js"></script>
 
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:500&amp;display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&amp;display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:500&amp;display=swap" rel="preload" as="font" />
+        <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&amp;display=swap" rel="preload" as="font" />
     </head>
 
     <body>
@@ -41,6 +42,7 @@
             </div>
         </div>
 
-        <script>setTimeout(()=>{$(".pg-canvas").remove(),$(".pjs").remove(),$(".sw").show()},2e3);</script>
+        <script>setTimeout(() => { $(".pg-canvas").remove(), $(".pjs").remove(), $(".sw").show() }, 2e3);</script>
     </body>
+
 </html>
