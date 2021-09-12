@@ -47,11 +47,12 @@ APIRouter.post('/register', async (req, res) =>
         });
     }
     else
-        return res.status(400).json({ ok: false, message: 'Invalid or expired invite code.' });
+        return res.status(400).json({ ok: false, message: 'Invalid or expired invite code.', status: 400 });
 });
 
 APIRouter.post('/login', async (req, res) =>
 {
+    // Neat, circular import. I hate this shit. - Ace <3
     ps.then(passport =>
     {
         passport.authenticate('local', (err, user, info) =>
